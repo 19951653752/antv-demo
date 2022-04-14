@@ -3,3 +3,25 @@
   /* justify-content: center;
   align-items: center; */
 }
+.minimapClassView {
+  box-sizing: content-box;
+  padding: 15px;
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  background: #f5f7f9;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+.minimapClassEdit {
+  box-sizing: content-box;
+  padding: 15px;
+  position: absolute;
+  right: 5px;
+  bottom: 45px;
+  background: #f5f7f9;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+.minimapViewportClass {
+  outline: #0070cc solid 2px !important;
+  background: rgba(0, 112, 204, 0.1);
+}

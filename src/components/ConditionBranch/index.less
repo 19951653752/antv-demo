@@ -1,0 +1,53 @@
+.conBox {
+  .conTool {
+    margin-bottom: 10px;
+    button {
+      background: none;
+      padding: 2px 7px;
+      cursor: pointer;
+    }
+    .conButton {
+      color: #1890ff;
+      border: 1px solid #1890ff;
+      + button {
+        margin-left: -1px;
+      }
+    }
+    span {
+      .addConButton {
+        color: #000;
+        border: 1px solid #aaa;
+        + button {
+          margin-left: -1px;
+        }
+      }
+    }
+    span :nth-child(2) {
+      margin-left: 10px;
+    }
+  }
+  .itemBox {
+    position: relative;
+    margin-left: 30px;
+    .item {
+      background: #F8F8FA;
+    }
+  }
+  .itemBox::before {
+    position: absolute;
+    content: "";
+    top: -10px;
+    left: -30px;
+    width: 20px;
+    border-left: 1px solid #ccc;
+    bottom: 0;
+  }
+  .itemBox::after {
+    position: absolute;
+    content: "";
+    top: 50%;
+    width: 20px;
+    left: -30px;
+    border-top: 1px solid #ccc;
+  }
+}

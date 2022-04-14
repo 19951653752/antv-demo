@@ -1,62 +1,65 @@
-// 自定义行为
-
 export default (G6) => {
-  /* 注册 node hover 行为 */
   G6.registerBehavior('node-hover', {
-    getEvents () {
+    getEvents() {
       return {
         'node:mouseenter': 'onNodeEnter',
         'node:mouseleave': 'onNodeLeave',
-      };
+      }
     },
-    onNodeEnter (e) {
-      // 显示当前节点的锚点
-      e.item.setState('nodeState:hover', true); // 二值状态
-    },
-    onNodeLeave (e) {
-      // 将锚点再次隐藏
-      e.item.setState('nodeState:hover', false); // 二值状态
-    },
-  });
+    onNodeEnter(e) {
+      console.log(e)
+      const itemId = e.item.get('id')
+      const itemNode = this.graph.findById(itemId)
+      const itemGroup = itemNode.get('group')
+      const itemModel = e.item.get('model')
+      const nodeName = e.target.cfg.name
+      const { nodeType, style: { width, height } } = itemModel
+      const nodeNameArr = ['custom-node', 'check-title-bgc']
 
-  /* 注册 node select 行为 */
-  G6.registerBehavior('node-select', {
-    getEvents () {
-      return {
-        'node:click': 'onNodeClick',
-      };
+      if (nodeNameArr.includes(nodeName)) {
+        if (nodeType === 'check') {
+          itemGroup.addShape('text', {
+            attrs: {
+              fontFamily: 'iconfont',
+              text: '\ue6f3',
+              fill: '#fff',
+              fontSize: 14,
+              cursor: 'pointer',
+              x: width / 2 - 24,
+              y: -height / 2 + 22,
+            },
+            name: 'check-title-del',
+          })
+        } else if (nodeType === 'condition') {
+          itemGroup.addShape('text', {
+            attrs: {
+              fontFamily: 'iconfont',
+              text: '\ue6f3',
+              fill: 'orange',
+              fontSize: 14,
+              cursor: 'pointer',
+              x: width / 2 - 24,
+              y: -height / 2 + 22,
+            },
+            name: 'condition-title-del',
+          })
+        }
+        e.item.setState('nodeState:hover', true)
+      }
     },
-    onNodeClick (e) {
-      this._clearSelected();
-      e.item.toFront();
-      // 获取被点击的节点元素对象, 设置当前节点的 click 状态为 selected
-      // e.item.setState('nodeState', 'selected');
-      e.item.setState('nodeState:selected', true);
-      // 将点击事件发送给 graph 实例
-      this.graph.emit('after-node-selected', e);
-    },
-    // 清空已选
-    _clearSelected () {
-      const selectedNodes = this.graph.findAllByState('node', 'nodeState:selected');
+    onNodeLeave(e) {
+      const itemId = e.item.get('id')
+      const itemNode = this.graph.findById(itemId)
+      const itemGroup = itemNode.get('group')
 
-      selectedNodes.forEach(node => {
-        node.clearStates(['nodeState:selected', 'nodeState:hover']);
-      });
-    },
-  });
-
-  G6.registerBehavior('edge-active', {
-    getEvents () {
-      return {
-        'edge:mouseenter': 'onMouseEnter',
-        'edge:mouseleave': 'onMouseLeave',
-      };
-    },
-    onMouseEnter (e) {
-      e.item.setState('edgeState:active', true);
-    },
-    onMouseLeave (e) {
-      e.item.setState('edgeState:active', false);
-    },
-  });
-};
+      const arr = itemGroup.cfg.children
+      const nameArr = ['check-title-del', 'condition-title-del']
+      for (const i in arr) {
+        if (nameArr.includes(arr[i].cfg.name)) {
+          arr.splice(i, 1)
+        }
+      }
+      e.item.setState('nodeState:hover', false)
+    }
+  })
+}

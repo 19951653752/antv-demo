@@ -1,0 +1,138 @@
+.nodeAttr {
+  font-family: iconfont;
+  .form {
+    .inputBox {
+      display: flex;
+      .label {
+        width: 50px;
+        // display: flex;
+        // align-items: center;
+        line-height: 2.2;
+      }
+    }
+    .checkBox {
+      margin-top: 16px;
+      .title {
+        font-size: 16px;
+        font-weight: 600;
+      }
+      // .radioBox {
+      //   margin-top: 16px;
+      // }
+      .btnBox {
+        margin-top: 16px;
+        button {
+          border-radius: 5px;
+        }
+      }
+      .selectBox > span {
+        padding: 5px 6px;
+        margin-right: 8px;
+        background: #F8F8FA;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        color: #7A7A7C;
+      }
+      .selectBox {
+        .clearBtn {
+          color: #1890ff;
+          border: 1px solid #CFD7E4;
+        }
+        .clearBtn > span {
+          margin-right: 4px;
+        }
+      }
+      .resolve {
+        .label {
+          font-weight: 600;
+        }
+      }
+      .reject {
+        .label {
+          font-weight: 600;
+        }
+      }
+    }
+    .checkBox>div {
+      margin-top: 16px;
+    }
+    .dashed {
+      margin-top: 30px;
+      margin-left: -16px;
+      border-top: 1px dashed #aaa;
+    }
+    .submit {
+      text-align: center;
+      margin-top: 40px;
+    }
+  }
+
+}
+.custonButton {
+  display: inline-block;
+  min-width: 88px;
+  padding: 3px 15px;
+  margin-left: 10px;
+  text-align: center;
+  border: 1px solid #bbb;
+  color: #bbb;
+  background: #fff;
+  border-radius: 5px;
+  position: relative;
+  cursor: pointer;
+  .delete {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    line-height: 1;
+    font-size: 14px;
+    color: #fff;
+    border-radius: 50%;
+  }
+}
+.successButton {
+  border: 1px solid #1890ff;
+  color: #1890ff;
+  background: rgba(#6CB4F7, 0.1);
+  .delete {
+    background: #1890ff;
+  }
+}
+.addSuccessButton {
+  width: 88px;
+    min-width: 88px;
+  border: 1px solid #1890ff;
+  color: #1890ff;
+  .addSuccessInput {
+    border: none;
+    width: 50px;
+    min-width: 50px;
+    padding: 0;
+  }
+  .addSuccessInput:focus {
+    outline: none;
+  }
+}
+.errorButton {
+  border: 1px solid #E44A72;
+  color: #E44A72;
+  background: rgba(#6CB4F7, 0.1);
+  .delete {
+    background: #E44A72;
+  }
+}
+.addErrorButton {
+  width: 88px;
+    min-width: 88px;
+  border: 1px solid #E44A72;
+  color: #E44A72;
+  .addErrorInput {
+    border: none;
+    width: 50px;
+    min-width: 50px;
+    padding: 0;
+  }
+  .addErrorInput:focus {
+    outline: none;
+  }
+}
