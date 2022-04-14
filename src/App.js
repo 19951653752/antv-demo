@@ -197,7 +197,6 @@ export default class index extends Component {
       this.setState({
         nodeId
       })
-
       const itemNode = this.graph.findById(nodeId)
       const itemGroup = itemNode.get('group')
       const childrenArr = itemGroup.cfg.children
