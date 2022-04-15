@@ -85,6 +85,58 @@ export default class index extends Component {
     console.log(data)
     this.graph.changeData(data)
   }
+  recursion = (delIdArr, faSource) => {
+    const { nodeData, edgeData } = this.state
+    for (let i = 0; i < nodeData.length; i++) {
+      if (delIdArr.includes(nodeData[i].id)) {
+        nodeData.splice(i, 1)
+        i < nodeData.length && i > 0 && i--
+      }
+    }
+    this.graph.removeItem(this.graph.findById(delIdArr[0]))
+    this.graph.removeItem(this.graph.findById(delIdArr[1]))
+    let source = ''
+    let target = ''
+    let index = ''
+    let arrTemp = []
+    console.log(faSource)
+    console.log(delIdArr)
+    console.log(...edgeData)
+    for (let i = edgeData.length - 1; i >= 0; i--) {
+      if (delIdArr.includes(edgeData[i].source)) {
+        index = i
+        arrTemp.push(edgeData[i].target)
+        target = edgeData[i].target
+        edgeData.splice(i, 1)
+      }
+    }
+    console.log(arrTemp)
+    arrTemp = arrTemp.filter(item => {
+      return item !== '-1'
+    })
+    if (arrTemp.length > 0) {
+      console.log('11111111111111111111')
+      this.recursion(arrTemp, faSource)
+    } else {
+      console.log('22222222222222222222222')
+      if (faSource) {
+        console.log('3333333333333333333')
+        const obj = {
+          source: faSource,
+          target: target
+        }
+        edgeData.splice(index, 0, obj)
+      }
+    }
+
+    this.setState({
+      nodeData,
+      edgeData
+    })
+    console.log(edgeData)
+    this.changeData()
+    this.graph.layout()
+  }
   getGraph = () => {
     console.log(this)
     const self = this
@@ -163,6 +215,7 @@ export default class index extends Component {
       },
       modes: {
         default: [
+          'drag-canvas',
           'zoom-canvas',
           'node-hover',
           'drag-canvas'
@@ -191,7 +244,7 @@ export default class index extends Component {
   }
   mouseClick = () => {
     this.graph.on('node:click', (e) => {
-      console.log(e.target.cfg.name)
+      console.log(e.item.get('id'))
       const { nodeData, edgeData } = this.state
       const nodeId = e.item.get('id')
       this.setState({
@@ -377,24 +430,60 @@ export default class index extends Component {
           let source = ''
           let target = ''
           let index = ''
+          let delIdArr = []
+          let faSource = ''
+          // 先拿到当前节点的父节点，存起来
+          edgeData.forEach(item => {
+            if (item.target === nodeId) {
+              faSource = item.source
+            }
+          })
           for (let i = edgeData.length - 1; i >= 0; i--) {
             if (nodeIdArr.includes(edgeData[i].target)) {
               index = i
               source = edgeData[i].source
+              console.log(edgeData[i].source)
               edgeData.splice(i, 1)
             } else if (nodeIdArr.includes(edgeData[i].source)) {
+              delIdArr.push(edgeData[i].target)
               index = i
               target = edgeData[i].target
+              console.log(edgeData[i].target)
               edgeData.splice(i, 1)
             }
           }
-          const obj = {
-            source,
-            target
+          delIdArr = delIdArr.filter(item => {
+            return item !== '-1'
+          })
+          console.log(delIdArr.length)
+          console.log(faSource)
+          if (delIdArr.length > 0) {
+            this.recursion(delIdArr, faSource)
+            // const obj = {
+            //   source: '0',
+            //   target: '-1'
+            // }
+            // edgeData.push(obj)
+          } else {
+            const obj = {
+              source,
+              target
+            }
+            edgeData.splice(index, 0, obj)
           }
-          edgeData.splice(index, 0, obj)
+          console.log(nodeData)
           console.log(edgeData)
 
+          // 如果当前条件节点下面还有子节点，则连子节点一同删除
+          // 存放需要删除的节点id
+          // const delIdArr = []
+          // edgeData.forEach(item => {
+          //   console.log(item)
+          //   if (item.source === nodeId) {
+          //     delIdArr.push(item.target)
+          //   }
+          // })
+          // console.log(delIdArr)
         }
         // 大于两个条件分支，只删除当前分支
         else {
@@ -413,6 +502,8 @@ export default class index extends Component {
           }
           console.log(edgeData)
         }
+
+
         this.setState({
           nodeData,
           edgeData
@@ -438,15 +529,18 @@ export default class index extends Component {
         const date = Date.now() + ''
         const { nodeId, nodeData, edgeData } = this.state
         const titleArr = []
+        const idArr = []
         nodeData.forEach(item => {
+          idArr.push(item.id)
           item.title && item.title.startsWith('审核节点') && titleArr.push(item.title.slice(-1))
         })
         const maxTitle = Math.max(...titleArr) + 1
         console.log(maxTitle)
+        const maxId = +idArr.sort().pop() + 1 + ''
         const nodeObj = {
-          id: date,
-          title: '审核节点' + maxTitle,
-          label: '审核节点' + maxTitle,
+          id: maxId,
+          title: '审核节点' + maxId,
+          label: '审核节点' + maxId,
           nodeType: 'check'
         }
         nodeData.push(nodeObj)
@@ -461,10 +555,10 @@ export default class index extends Component {
             const edgeArr = [
               {
                 source: +sourceArr + '',
-                target: date
+                target: maxId
               },
               {
-                source: date,
+                source: maxId,
                 target: +targetArr + ''
               }
             ]
@@ -483,22 +577,25 @@ export default class index extends Component {
         const { nodeId, nodeData, edgeData } = this.state
         console.log(nodeId)
         const titleArr = []
+        const idArr = []
         nodeData.forEach(item => {
+          idArr.push(item.id)
           item.title && item.title.startsWith('条件') && titleArr.push(item.title.slice(-1))
         })
-        const maxTitle = Math.max(...titleArr) + 1
-        console.log(maxTitle)
+        const maxTitle = titleArr.length ? Math.max(...titleArr) + 1 : 1
+        const maxId = +idArr.sort().pop() + 1 + ''
+        console.log(maxId)
         const nodeArr = [
           {
-            id: date,
-            title: '条件' + maxTitle,
-            label: '条件' + maxTitle,
+            id: maxId,
+            title: '条件' + maxId,
+            label: '条件' + maxId,
             nodeType: 'condition'
           },
           {
-            id: +date + 1 + '',
-            title: '条件' + (maxTitle + 1),
-            label: '条件' + (maxTitle + 1),
+            id: +maxId + 1 + '',
+            title: '条件' + (+maxId + 1),
+            label: '条件' + (+maxId + 1),
             nodeType: 'condition'
           }
         ]
@@ -524,18 +621,18 @@ export default class index extends Component {
         const edgeArr = [
           {
             source: sourceArr,
-            target: date
+            target: maxId
           },
           {
             source: sourceArr,
-            target: +date + 1 + ''
+            target: +maxId + 1 + ''
           },
           {
-            source: date,
+            source: maxId,
             target: targetArr
           },
           {
-            source: +date + 1 + '',
+            source: +maxId + 1 + '',
             target: targetArr
           }
         ]
