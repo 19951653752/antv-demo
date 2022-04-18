@@ -430,7 +430,7 @@ export default class index extends Component {
             const { children } = itemGroup.cfg
             const icon = children.find(child => child.cfg.name === 'add-check-shape')
             const iconText = children.find(child => child.cfg.name === 'add-check-text')
-            if(icon) {
+            if (icon) {
               icon.remove()
               iconText.remove()
             }
@@ -554,23 +554,51 @@ export default class index extends Component {
 
         const sourceArr = []
         const targetArr = []
-        for (const i in edgeData) {
+        let index = ''
+        const edgeArr = []
+        for (let i = edgeData.length - 1; i >= 0; i--) {
           if (edgeData[i].source === nodeId) {
             sourceArr.push(edgeData[i].source)
             targetArr.push(edgeData[i].target)
-            const edgeArr = [
-              {
-                source: +sourceArr + '',
-                target: maxId
-              },
-              {
-                source: maxId,
-                target: +targetArr + ''
-              }
-            ]
-            edgeData.splice(i, 1, ...edgeArr)
+            index = i
+            console.log(edgeData[i])
+            edgeData.splice(i, 1)
           }
         }
+        edgeArr.push({
+          source: sourceArr[0],
+          target: maxId
+        })
+        targetArr.forEach(item => {
+          edgeArr.push({
+            source: maxId,
+            target: item
+          })
+        })
+        // 判断source有无添加条件，有的话，就删除，再给新的节点 添加
+        for (let i = nodeData.length - 1; i >= 0; i--) {
+          if (nodeData[i].id === nodeId) {
+            nodeData[i].addNode = false
+          }
+          if (nodeData[i].id === maxId) {
+            nodeData[i].addNode = true
+          }
+        }
+        const itemNode = this.graph.findById(nodeId)
+        const itemGroup = itemNode.get('group')
+        const { children } = itemGroup.cfg
+        const icon = children.find(child => child.cfg.name === 'add-check-shape')
+        const iconText = children.find(child => child.cfg.name === 'add-check-text')
+        if (icon) {
+          icon.remove()
+          iconText.remove()
+        }
+
+
+        console.log(edgeArr)
+        edgeData.splice(index, 0, ...edgeArr)
+        console.log(sourceArr)
+        console.log(targetArr)
         this.setState({
           nodeData,
           edgeData
