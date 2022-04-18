@@ -118,9 +118,9 @@ const registerNode = (G6) => {
       // 静态展示（添加条件）
       addCondition(cfg, group) {
         const { id } = cfg
-        console.log(id)
-        console.log(group)
-        console.log(this)
+        // console.log(id)
+        // console.log(group)
+        // console.log(this)
         group.addShape('rect', {
           attrs: {
             width: 80,

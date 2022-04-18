@@ -3,8 +3,8 @@
 export default G6 => {
   G6.registerEdge('k-edge', {
     draw (cfg, group) {
-      console.log(cfg)
-      console.log(group)
+      // console.log(cfg)
+      // console.log(group)
       const xOffset = 10;
       const { startPoint, endPoint } = cfg;
       const Xdiff = endPoint.x - startPoint.x;
