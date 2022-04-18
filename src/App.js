@@ -414,29 +414,29 @@ export default class index extends Component {
         console.log(nodeIdArr)
 
         // 只有两个条件分支，删一个则全部删除
-        if (branchCount === 2) {
-          // 删除添加条件按钮
-          // 通过边，拿到要操作的节点，先修改当前节点的addNode，再删除当前节点下的添加条件按钮
-          edgeData.forEach(item => {
-            if (item.target === nodeId) {
-              const itemNode = this.graph.findById(item.source)
-              const itemGroup = itemNode.get('group')
+        // 删除添加条件按钮
+        // 通过边，拿到要操作的节点，先修改当前节点的addNode，再删除当前节点下的添加条件按钮
+        edgeData.forEach(item => {
+          if (item.target === nodeId) {
+            const itemNode = this.graph.findById(item.source)
+            const itemGroup = itemNode.get('group')
 
-              for (let i = nodeData.length - 1; i >= 0; i--) {
-                if (nodeData[i].id === item.source) {
-                  nodeData[i].addNode = false
-                }
-              }
-
-              const { children } = itemGroup.cfg
-              const icon = children.find(child => child.cfg.name === 'add-check-shape')
-              const iconText = children.find(child => child.cfg.name === 'add-check-text')
-              if (icon) {
-                icon.remove()
-                iconText.remove()
+            for (let i = nodeData.length - 1; i >= 0; i--) {
+              if (nodeData[i].id === item.source) {
+                nodeData[i].addNode = false
               }
             }
-          })
+
+            const { children } = itemGroup.cfg
+            const icon = children.find(child => child.cfg.name === 'add-check-shape')
+            const iconText = children.find(child => child.cfg.name === 'add-check-text')
+            if(icon) {
+              icon.remove()
+              iconText.remove()
+            }
+          }
+        })
+        if (branchCount === 2) {
           for (let i = 0; i < nodeData.length; i++) {
             if (nodeIdArr.includes(nodeData[i].id)) {
               nodeData.splice(i, 1)
