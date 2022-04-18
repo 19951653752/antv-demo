@@ -576,11 +576,15 @@ export default class index extends Component {
           })
         })
         // 判断source有无添加条件，有的话，就删除，再给新的节点 添加
+        let booTemp = false
         for (let i = nodeData.length - 1; i >= 0; i--) {
-          if (nodeData[i].id === nodeId) {
+          if (nodeData[i].id === nodeId && nodeData[i].addNode) {
             nodeData[i].addNode = false
+            booTemp = true
           }
-          if (nodeData[i].id === maxId) {
+        }
+        for (let i = nodeData.length - 1; i >= 0; i--) {
+          if (booTemp && nodeData[i].id === maxId) {
             nodeData[i].addNode = true
           }
         }
